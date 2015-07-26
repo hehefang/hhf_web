@@ -94,49 +94,7 @@
 				);
 			});
 			
-			$(document).on("click","#getCode",function(){
-				if($(this).hasClass("disabled")){
-					return false;
-				}
-				
-				var mobile = $("#mobile").val();
-				
-				$.post("${ctx}/getCode.action",{mobile:mobile});
-				$(this).addClass("disabled");
-				var second = 60;
-				$(this).addClass("run");
-				id = setInterval(function(){
-					$("#getCode").text(second+"秒后，重新获取");
-					if(second == 0){
-						clearInterval(id);
-						$("#getCode").removeClass("disabled");
-						$("#getCode").removeClass("run");
-						$("#getCode").text("获取验证码");
-					}
-					second--;
-				},1000);
-			});
-			
-			$(document).on("blur","#validCode",function(){
-				var code = $(this).val();
-				var mobile = $("#mobile").val();
-				if(!code){
-					$(this).focus();
-					return false;
-				}
-				$.getJSON("${ctx}/validCode.action",{code:code,mobile:mobile},function(json){
-					if(json.status){
-						$("#codeTip").addClass("hide");
-						$("#codeOk").removeClass("hide");
-					}else{
-						$("#codeTip").removeClass("hide");
-						$("#codeOk").addClass("hide");
-						$("#codeTip").children("div.hintBox").html("<span>验证码有误！</span>");
-						$(this).focus();
-					}
-				});
-			});
-			
+
 			$(document).on("blur","#pwd",function(){
 				var pwd = $(this).val();
 				if(!pwd){
@@ -188,11 +146,10 @@
 			$(document).on("click","#register",function(){
 				var userName = $("#userName").val();
 				var mobile = $("#mobile").val();
-				var code = $("#validCode").val();
 				var pwd = $("#pwd").val();
 				var repwd = $("#repwd").val();
 				$.getJSON("${ctx}/validRegister.action",
-					{userName:userName,mobile:mobile,code:code,pwd:pwd,repwd:repwd},
+					{userName:userName,mobile:mobile,pwd:pwd,repwd:repwd},
 					function(json){
 						if(json.userNameStatus == 0 && json.mobileStatus == 0 && json.codeStatus == 0 
 								&& json.pwdStatus == 0 && json.repwdStatus ==0){
@@ -231,24 +188,7 @@
 								$("#mobileTip").removeClass("errTxt");
 								$("#mobileTip").children("div.hintBox").html('<span>此号码已经注册，请直接 <a href="${ctx}/login.action">登录</a></span>');
 								$("#mobileOk").addClass("hide");
-							}
-							
-							if(json.codeStatus ==1){
-								$("#codeTip").removeClass("hide");
-								$("#codeTip").addClass("errTxt");
-								$("#codeOk").addClass("hide");
-								$("#codeTip").children("div.hintBox").html("<span>请输入验证码！</span>");
-							}else if(json.codeStatus ==2){
-								$("#codeTip").removeClass("hide");
-								$("#codeTip").addClass("errTxt");
-								$("#codeOk").addClass("hide");
-								$("#codeTip").children("div.hintBox").html("<span>手机号码有误！</span>");
-							}else if(json.codeStatus ==3){
-								$("#codeTip").removeClass("hide");
-								$("#codeTip").addClass("errTxt");
-								$("#codeOk").addClass("hide");
-								$("#codeTip").children("div.hintBox").html("<span>验证码输入不正确！</span>");
-							}
+							}							
 							
 							if(json.pwdStatus == 1){
 								$("#pwdTip").removeClass("hide");
@@ -315,16 +255,6 @@
 								<input id="mobile" name="mobile" type="text" placeholder="" class="txt xl w-xl" />
 								<div id="mobileTip" class="checkHint hide"><div class="hintBox"><span>此号码已经注册，请直接 <a href="${ctx}/login.action">登录</a></span></div></div>
 								<div id="mobileOk" class="checkHint hide"><div class="hintBox"><span><i class="icon i-ok"></i></span></div></div>
-							</dd>
-						</dl>
-						<dl class="form-item item-auth">
-							<dt class="item-label"><label><em>*</em>验证码：</label></dt>
-							<dd class="item-cont">
-								<!--<a href="#" class="btn btn-def lgl">获取短信验证码</a>-->
-								<a href="javascript:;" id="getCode" class="btn btn-def lgl disabled">获取验证码</a>
-								<input type="text" id="validCode" class="txt xl phoneCode" />							
-								<div id="codeTip" class="checkHint"><div class="hintBox"><span>点击获取手机短信验证码， 不区分大小写</span></div></div>
-								<div id="codeOk" class="checkHint hide"><div class="hintBox"><span><i class="icon i-ok"></i></span></div></div>
 							</dd>
 						</dl>
 						<dl class="form-item item-pwd">

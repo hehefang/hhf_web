@@ -211,20 +211,20 @@ public class LoginController {
 		}
 		
 		//校验验证码
-		if(StringUtils.isBlank(code)){
-			map.put("codeStatus", 1);
-		}else if(0!=map.get("mobileStatus")){
-			map.put("codeStatus", 2);
-		}else{
-			String json = this.validCode(code, mobile);
-			Map<String,Boolean> mapTemp = JSON.parseObject(json, new TypeReference<Map<String,Boolean>>(){});
-			boolean status = mapTemp.get("status");
-			if(!status){
-				map.put("codeStatus", 3);
-			}else{
-				map.put("codeStatus", 0);
-			}
-		}
+//		if(StringUtils.isBlank(code)){
+//			map.put("codeStatus", 1);
+//		}else if(0!=map.get("mobileStatus")){
+//			map.put("codeStatus", 2);
+//		}else{
+//			String json = this.validCode(code, mobile);
+//			Map<String,Boolean> mapTemp = JSON.parseObject(json, new TypeReference<Map<String,Boolean>>(){});
+//			boolean status = mapTemp.get("status");
+//			if(!status){
+//				map.put("codeStatus", 3);
+//			}else{
+//				map.put("codeStatus", 0);
+//			}
+//		}
 		
 		//验证密码
 		if(StringUtils.isBlank(pwd)){
